@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audio Player</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="jquery-3.7.1.js"></script>
+    <script src="script.js" defer></script>
+</head>
+
+<body>
+    <div id="container">
+        <div id="header">
+            <div id="logo"></div>
+            <div id="playlist-box"><div id="playlist"></div></div>
+        </div>
+        <div id="search-box">
+            <div id="search">
+                <div id="search-icon"></div>
+                <label for="search-input">歌曲名/歌手</label>
+                <input type="text" id="search-input">
+                <button id="search-button">搜索</button>
+                <div id="search-result"></div>
+            </div>
+        </div>
+        <div id="audio-box">
+        </div>
+        <div id="player-box">
+            <div id="disc-box">
+                <div id="disc">
+                    <div id="disc-cover"></div>
+                </div>
+            </div>
+            <div id="control-box">
+                <div id="current-box">
+                    <div id="current-name">
+                        <div id="current-name-content"></div>
+                    </div>
+                    <div id="current-artist">
+                        <div id="current-artist-content"></div>
+                    </div>
+                </div>
+                <div id="slider">
+                    <div id="slider-time">
+                        <span id="slider-time-current"></span>
+                        <span id="slider-time-total"></span>
+                    </div>
+                    <input type="range" id="slider-bar" class="slider" min="0" max="100" value="0" step="1" oninput="updateCurrentTime(this.value)">
+                </div>
+
+                <div id="controller">
+                    <ul>
+                        <li>
+                            <div id="like"><i></i></div>
+                        </li>
+                        <li>
+                            <div id="prev"><i></i></div>
+                        </li>
+                        <li>
+                            <div id="play"><i></i></div>
+                        </li>
+                        <li>
+                            <div id="next"><i></i></div>
+                        </li>
+                        <li>
+                            <div id="repeat"><i></i></div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+
+    </footer>
+</body>
+
+</html>
