@@ -60,8 +60,8 @@ function showCurrentSong() {
     const audioUrl = `${musicPath}${artist} - ${title}.mp3`;
     const imageUrl = `${imagePath}${artist} - ${title}.jpg`;
 
-    openSong(audioUrl, playTime);
     openPic(imageUrl);
+    openSong(audioUrl, playTime);
     initSongTime(playTime, duration);
     updateSongInfo(title, artist);
     setCookie(title, artist);
@@ -80,6 +80,13 @@ function openSong(fileUrl, time) {
         getNextSong();
         showCurrentSong();
         $("audio").trigger("play");
+    });
+    audio.addEventListener("pause", () => {
+        $("#disc-cover").css("animation-play-state", "paused");
+    });
+
+    audio.addEventListener("play", () => {
+        $("#disc-cover").css("animation-play-state", "running");
     });
 }
 
