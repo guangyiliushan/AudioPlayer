@@ -48,6 +48,8 @@ function showSearchResult(input) {
         $("#search-result").append(songBox);
     });
     $("#search-result").css("display", "flex");
+    $("#timeslider-text-current").text(formatTime(time));
+    $("#timeslider-text-total").text(formatTime(duration));
 }
 
 $(document).ready(function () {

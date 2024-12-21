@@ -39,9 +39,13 @@ function initPlayer() {
     $("#playlist-box").on("click", switchPlayList);
 }
 
+function initSong(){
+
+}
+
 function initSongTime(time, duration) {
-    $("#slider-time-current").text(formatTime(time));
-    $("#slider-time-total").text(formatTime(duration));
+    $("#timeslider-text-current").text(formatTime(time));
+    $("#timeslider-text-total").text(formatTime(duration));
 }
 
 function showCurrentSong() {
@@ -62,8 +66,8 @@ function openSong(fileUrl, time) {
     audio.currentTime = time;
     $("#audio-box").empty().append(audio).css("display", "none");
     audio.addEventListener("timeupdate", () => {
-        $("#slider-time-current").text(formatTime(audio.currentTime));
-        $("#slider-bar").val((audio.currentTime / audio.duration) * 100);
+        $("#timeslider-text-current").text(formatTime(audio.currentTime));
+        $("#timeslider-bar").val((audio.currentTime / audio.duration) * 100);
         localStorage.setItem("playTime", audio.currentTime);
     });
     audio.addEventListener("ended", () => {
@@ -287,7 +291,7 @@ function updateVolume(value) {
     const volumeIcon = $("#voice i");
     volumeIcon.removeClass("fa-volume-up fa-volume-down fa-volume-mute");
     if (value == 0) {
-        volumeIcon.addClass("fa-volume-off");
+        volumeIcon.addClass("fa-volume-mute");
     } else if (value > 50) {
         volumeIcon.addClass("fa-volume-up");
     } else if (value > 0) {

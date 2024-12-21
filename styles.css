@@ -306,12 +306,12 @@ footer {
     white-space: nowrap;
 }
 
-#slider {
+#timeslider-box {
     width: 80%;
     margin-bottom: 20px;
 }
 
-#slider-time {
+#timeslider-text {
     display: flex;
     justify-content: space-between;
     font-size: .6rem;
@@ -319,11 +319,11 @@ footer {
     margin-top: 5px;
 }
 
-#slider-label {
+#timeslider-label {
     display: none;
 }
 
-#slider-bar {
+#timeslider-bar {
     width: 100%;
     height: 5px;
 }
@@ -339,12 +339,12 @@ footer {
         inset -1px -1px 1px 0 rgba(0, 0, 0, 0.2);
 }
 
-#slider-bar::-webkit-slider-thumb {
+#timeslider-bar::-webkit-slider-thumb {
     width: 15px;
     height: 15px;
 }
 
-#slider-bar::-moz-range-thumb {
+#timeslider-bar::-moz-range-thumb {
     width: 15px;
     height: 15px;
 }
