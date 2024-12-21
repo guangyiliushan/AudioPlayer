@@ -175,7 +175,7 @@ footer {
     height: 100%;
     display: flex;
     align-items: center;
-    color: #888; 
+    color: #888;
     font-size: 16px;
     padding: 0 10px;
 }
@@ -229,6 +229,7 @@ footer {
     display: flex;
     justify-content: center;
     align-items: center;
+    text-align: right;
 }
 
 #disc-box {
@@ -318,11 +319,18 @@ footer {
     margin-top: 5px;
 }
 
+#slider-label {
+    display: none;
+}
+
 #slider-bar {
     width: 100%;
+    height: 5px;
+}
+
+.slider {
     -webkit-appearance: none;
     appearance: none;
-    height: 5px;
     background: transparent;
     outline: none;
     box-shadow: inset 2px 2px 5px 0 rgba(0, 0, 0, 0.2),
@@ -332,10 +340,18 @@ footer {
 }
 
 #slider-bar::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
     width: 15px;
     height: 15px;
+}
+
+#slider-bar::-moz-range-thumb {
+    width: 15px;
+    height: 15px;
+}
+
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
     border-radius: 50%;
     outline: none;
     border: none;
@@ -344,11 +360,9 @@ footer {
     box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
 }
 
-#slider-bar::-moz-range-thumb {
+.slider::-moz-range-thumb {
     -webkit-appearance: none;
     appearance: none;
-    width: 15px;
-    height: 15px;
     border-radius: 50%;
     outline: none;
     border: none;
@@ -395,6 +409,56 @@ footer {
 
 #controller i:hover {
     color: #FF5733;
+}
+
+#volume-box {
+    width: 65vw;
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    margin-top: 10px;
+}
+
+#volume {
+    width: calc(10vw + 4rem);
+    height: 1rem;
+    display: none;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 1%;
+    margin-left: 5%;
+    border-radius: 5px;
+    background-color: #333;
+}
+
+#volume-label {
+    display: none;
+}
+
+#volume-bar {
+    width: 10vw;
+    height: 3px;
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+#volume-bar::-webkit-slider-thumb {
+    width: 10px;
+    height: 10px;
+}
+
+#volume-bar::-moz-range-thumb {
+    width: 10px;
+    height: 10px;
+}
+
+#volume-value {
+    width: 4rem;
+    font-size: 0.8rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #ffffff;
 }
 
 footer {

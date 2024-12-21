@@ -1,6 +1,7 @@
 var musicPath = "./music/";
 var imagePath = "./images/";
 var loopMode = 0;
+var volumeValue = 100;
 var songList = localStorage.getItem("songList") ? JSON.parse(localStorage.getItem("songList")) : [];
 var currentSong = localStorage.getItem("currentSong") ? JSON.parse(localStorage.getItem("currentSong")) : {};
 var currentIndex = localStorage.getItem("currentIndex") ? JSON.parse(localStorage.getItem("currentIndex")) : 0;
@@ -108,18 +109,20 @@ function setupControls() {
         getNextSong();
         showCurrentSong();
         togglePlayPause();
+        const music = $("#audio-box > audio").get(0);
+        music.volume = volumeValue / 100;
         if (loopMode === 2) {
-            const music = $("#audio-box > audio");
-            music.prop("loop", true);
+            music.prop("loop", true); 置
         }
     });
     $("#prev").on("click", () => {
         getPrevSong();
         showCurrentSong();
         togglePlayPause();
+        const music = $("#audio-box > audio").get(0);
+        music.volume = volumeValue / 100;
         if (loopMode === 2) {
-            const music = $("#audio-box > audio");
-            music.prop("loop", true);
+            music.prop("loop", true); 置
         }
     });
     $("#loop").on("click", () => {
@@ -140,6 +143,20 @@ function setupControls() {
             const music = $("#audio-box > audio");
             music.prop("loop", true);
         }
+    });
+    $("#voice").on("click", () => {
+        if ($("#volume").css("display") === "flex") {
+            $("#volume").css("display", "none");
+            return;
+        }
+        else {
+            $("#volume").css("display", "flex");
+            return;
+        }
+    }).on("doubleclick", () => {
+        $("#volume-bar").val(0);
+        updateVolume(0);
+        volumeValue = 0;
     });
 }
 
@@ -197,6 +214,11 @@ function initPlayList() {
             updateCurrentSong(currentIndex);
             showCurrentSong();
             togglePlayPause();
+            const music = $("#audio-box > audio").get(0);
+            music.volume = volumeValue / 100;
+            if (loopMode === 2) {
+                music.prop("loop", true); 置
+            }
         });
         if (i === currentIndex) {
             songBox.addClass("active");
@@ -256,6 +278,22 @@ function switchPlayList() {
         $("#playlist").css("display", "block");
         $("#playlist-close").css("display", "flex");
     }
+}
+
+function updateVolume(value) {
+    const audio = document.querySelector("#audio-box > audio");
+    audio.volume = value / 100;;
+    $("#volume-value span").text(`${value}%`);
+    const volumeIcon = $("#voice i");
+    volumeIcon.removeClass("fa-volume-up fa-volume-down fa-volume-mute");
+    if (value == 0) {
+        volumeIcon.addClass("fa-volume-off");
+    } else if (value > 50) {
+        volumeIcon.addClass("fa-volume-up");
+    } else if (value > 0) {
+        volumeIcon.addClass("fa-volume-down");
+    }
+    volumeValue = value;
 }
 
 initPlayer();
