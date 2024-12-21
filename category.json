@@ -1,0 +1,54 @@
+[
+    {
+        "category": "Indie Pop",
+        "songs": ["Belle & Sebastian - Sleep the Clock Around", "DOUDOU - 南三环东路", "告五人 - 在凌晨睡着的自己", "告五人 - 带我去找夜生活"]
+    },
+    {
+        "category": "Alternative Rock",
+        "songs": ["Belle & Sebastian - Sleep the Clock Around", "Blur - Beetlebum", "Blur - The Narcissist", "Salyu - アラベスク", "Salyu - グライド", "Salyu - 愛の実験", "Salyu - 飛べない翼", "Salyu - 飛行船"]
+    },
+    {
+        "category": "Britpop",
+        "songs": ["Blur - Beetlebum", "Blur - The Narcissist"]
+    },
+    {
+        "category": "J-Pop",
+        "songs": ["EGOIST - 1.4.2", "EGOIST - Departures〜あなたにおくるアイの歌〜", "EGOIST - Euterpe", "EGOIST - 永遠", "Salyu - アラベスク", "Salyu - グライド", "Salyu - 愛の実験", "Salyu - 飛べない翼", "Salyu - 飛行船"]
+    },
+    {
+        "category": "Anime",
+        "songs": ["EGOIST - 1.4.2", "EGOIST - Departures〜あなたにおくるアイの歌〜", "EGOIST - Euterpe", "EGOIST - 永遠"]
+    },
+    {
+        "category": "Indie Rock",
+        "songs": ["Modest Mouse - Missed the Boat", "Modest Mouse - The Good Times Are Killing Me"]
+    },
+    {
+        "category": "Post-Punk",
+        "songs": ["Molchat Doma - Волны", "Molchat Doma - Судно (Борис Рижий)"]
+    },
+    {
+        "category": "Russian",
+        "songs": ["Molchat Doma - Волны", "Molchat Doma - Судно (Борис Рижий)", "Кино - Группа крови", "Кино - Красно-желтые дни", "Кино - Печаль", "Перемотка - Солнце", "Перемотка - Супермарио"]
+    },
+    {
+        "category": "Russian Rock",
+        "songs": ["Кино - Группа крови", "Кино - Красно-желтые дни", "Кино - Печаль"]
+    },
+    {
+        "category": "Russian Pop",
+        "songs": ["Перемотка - Солнце", "Перемотка - Супермарио"]
+    },
+    {
+        "category": "Chinese",
+        "songs": ["DOUDOU - 南三环东路", "告五人 - 在凌晨睡着的自己", "告五人 - 带我去找夜生活"]
+    },
+    {
+        "category": "Japanese",
+        "songs": ["EGOIST - 1.4.2", "EGOIST - Departures〜あなたにおくるアイの歌〜", "EGOIST - Euterpe", "EGOIST - 永遠", "Salyu - アラベスク", "Salyu - グライド", "Salyu - 愛の実験", "Salyu - 飛べない翼", "Salyu - 飛行船"]
+    },
+    {
+        "category": "English",
+        "songs": ["Belle & Sebastian - Sleep the Clock Around", "Blur - Beetlebum", "Blur - The Narcissist", "Modest Mouse - Missed the Boat", "Modest Mouse - The Good Times Are Killing Me"]
+    }
+]

@@ -6,24 +6,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Audio Player</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <script src="jquery-3.7.1.js"></script>
     <script src="script.js" defer></script>
+    <script src="search.js" defer></script>
+    <script src="test.js" defer></script>
 </head>
 
 <body>
     <div id="container">
         <div id="header">
             <div id="logo"></div>
-            <div id="playlist-box"><div id="playlist"></div></div>
+            <div id="playlist-box">
+                <i class="fas fa-list"></i>
+                <div id="playlist"></div>
+                <div id="playlist-close"><i class="fas fa-angle-double-right"></i></div>
+            </div>
         </div>
         <div id="search-box">
             <div id="search">
-                <div id="search-icon"></div>
-                <label for="search-input">歌曲名/歌手</label>
-                <input type="text" id="search-input">
-                <button id="search-button">搜索</button>
-                <div id="search-result"></div>
+                <div id="search-icon"><i class="fas fa-search"></i></div>
+                <label for="search-input" id="search-label">歌曲名/歌手</label>
+                <input type="text" id="search-input" placeholder="点击推荐歌曲--搜索歌曲名/歌手/专辑" oninput="search(this.value)">
             </div>
+            <div id="search-result"></div>
         </div>
         <div id="audio-box">
         </div>
@@ -53,19 +59,19 @@
                 <div id="controller">
                     <ul>
                         <li>
-                            <div id="like"><i></i></div>
+                            <div id="like"><i class="far fa-heart"></i></div>
                         </li>
                         <li>
-                            <div id="prev"><i></i></div>
+                            <div id="prev"><i class="fas fa-step-backward"></i></div>
                         </li>
                         <li>
-                            <div id="play"><i></i></div>
+                            <div id="play"><i class="fas fa-play"></i></div>
                         </li>
                         <li>
-                            <div id="next"><i></i></div>
+                            <div id="next"><i class="fas fa-step-forward"></i></div>
                         </li>
                         <li>
-                            <div id="repeat"><i></i></div>
+                            <div id="loop"><i class="fas fa-bars"></i></div>
                         </li>
                     </ul>
                 </div>

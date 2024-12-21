@@ -1,22 +1,59 @@
+var musicPath = "./music/";
+var imagePath = "./images/";
+var loopMode = 0;
 var songList = localStorage.getItem("songList") ? JSON.parse(localStorage.getItem("songList")) : [];
 var currentSong = localStorage.getItem("currentSong") ? JSON.parse(localStorage.getItem("currentSong")) : {};
+var currentIndex = localStorage.getItem("currentIndex") ? JSON.parse(localStorage.getItem("currentIndex")) : 0;
 var playTime = localStorage.getItem("playTime") ? JSON.parse(localStorage.getItem("playTime")) : 0;
-var currentIndex = 0;
-var currentDuration = 100;
+
+function setCookie(songName, artistName, days = 1) {
+    const fileName = `${artistName} - ${songName}`;
+    let recentSongs = getCookie("recentSong");
+    if (!recentSongs.includes(fileName)) {
+        recentSongs.push(fileName);
+        recentSongs = recentSongs.slice(-10);
+        const date = new Date();
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+        const expires = "expires=" + date.toUTCString();
+        document.cookie = `recentSong=${recentSongs.join(",")}; ${expires}; path=/`;
+    }
+}
+
+function getCookie(name) {
+    const cookies = document.cookie.split(';');
+    for (let i = 0; i < cookies.length; i++) {
+        const cookie = cookies[i].trim();
+        if (cookie.startsWith(name + '=')) {
+            const value = cookie.substring(name.length + 1);
+            return value.split(",");
+        }
+    }
+    return [];
+}
 
 function initPlayer() {
     showCurrentSong();
     setupControls();
+    initPlayList();
+    $("#playlist-box").on("click", switchPlayList);
 }
 
-function initSongTime(time = 0) {
+function initSongTime(time, duration) {
     $("#slider-time-current").text(formatTime(time));
-    $("#slider-time-total").text(formatTime(currentDuration));
+    $("#slider-time-total").text(formatTime(duration));
 }
 
 function showCurrentSong() {
-    initSongTime(time);
+    const { title, artist, duration } = currentSong;
+    console.log(title, artist, duration);
+    const audioUrl = `${musicPath}${artist} - ${title}.mp3`;
+    const imageUrl = `${imagePath}${artist} - ${title}.jpg`;
+
+    openSong(audioUrl, playTime);
+    openPic(imageUrl);
+    initSongTime(playTime, duration);
     updateSongInfo(title, artist);
+    setCookie(title, artist);
 }
 
 function openSong(fileUrl, time) {
@@ -25,12 +62,13 @@ function openSong(fileUrl, time) {
     $("#audio-box").empty().append(audio).css("display", "none");
     audio.addEventListener("timeupdate", () => {
         $("#slider-time-current").text(formatTime(audio.currentTime));
-        $("#slider-bar").val((audio.currentTime / currentDuration) * 100);
+        $("#slider-bar").val((audio.currentTime / audio.duration) * 100);
+        localStorage.setItem("playTime", audio.currentTime);
     });
     audio.addEventListener("ended", () => {
         getNextSong();
         showCurrentSong();
-        audio.play();
+        $("audio").trigger("play");
     });
 }
 
@@ -70,11 +108,38 @@ function setupControls() {
         getNextSong();
         showCurrentSong();
         togglePlayPause();
+        if (loopMode === 2) {
+            const music = $("#audio-box > audio");
+            music.prop("loop", true);
+        }
     });
     $("#prev").on("click", () => {
         getPrevSong();
         showCurrentSong();
         togglePlayPause();
+        if (loopMode === 2) {
+            const music = $("#audio-box > audio");
+            music.prop("loop", true);
+        }
+    });
+    $("#loop").on("click", () => {
+        loopMode = (loopMode + 1) % 3;
+        const loopIcon = $("#loop i");
+        const loopModes = ["fa-bars", "fa-random", "fa-redo"];
+        const currentLoopMode = loopModes[loopMode];
+        loopIcon.removeClass(loopModes.join(" ")).addClass(currentLoopMode);
+        if (loopMode === 0) {
+            songList = localStorage.getItem("songList") ? JSON.parse(localStorage.getItem("songList")) : [];
+            currentIndex = localStorage.getItem("currentIndex") ? JSON.parse(localStorage.getItem("currentIndex")) : 0;
+        }
+        if (loopMode === 1) {
+            songList = songList.sort(() => 0.5 - Math.random());
+            initPlayList();
+        }
+        if (loopMode === 2) {
+            const music = $("#audio-box > audio");
+            music.prop("loop", true);
+        }
     });
 }
 
@@ -87,6 +152,8 @@ function formatTime(time) {
 function togglePlayPause() {
     const audio = document.querySelector("#audio-box > audio");
     audio.paused ? audio.play() : audio.pause();
+    const playIcon = $("#play i");
+    audio.paused ? playIcon.removeClass("fa-pause").addClass("fa-play") : playIcon.removeClass("fa-play").addClass("fa-pause");
 }
 
 function updateCurrentTime(value) {
@@ -105,12 +172,90 @@ function getPrevSong() {
 }
 
 function updateCurrentSong(currentIndex) {
-    const currentSong = songList[currentIndex];
-    currentSong.time = 0;
+    currentSong = songList[currentIndex];
+    playTime = 0;
+    localStorage.setItem("currentSong", JSON.stringify(currentSong));
+    localStorage.setItem("currentIndex", JSON.stringify(currentIndex));
+    initPlayList();
+}
+
+function initPlayList() {
+    $("#playlist").empty();
+    songList.forEach((song, i) => {
+        const { title, artist } = song;
+        let songBox = $(`<div class="playlist-item"></div>`);
+        let controls = $(`<div class="playlist-item-controls"></div>`);
+        const songElement = $(`<div class="playlist-item-songname">${title} - ${artist}</div>`);
+        let songUpElement = $(`<div class="playlist-item-controls-up"></div>`);
+        let songDownElement = $(`<div class="playlist-item-controls-down"></div>`);
+        let songRemoveElement = $(`<div class="playlist-item-controls-remove"></div>`);
+        const upicon = $(`<i class="fas fa-arrow-up"></i>`);
+        const downicon = $(`<i class="fas fa-arrow-down"></i>`);
+        const removeicon = $(`<i class="fas fa-trash-alt"></i>`);
+        songElement.on("click", () => {
+            currentIndex = i;
+            updateCurrentSong(currentIndex);
+            showCurrentSong();
+            togglePlayPause();
+        });
+        if (i === currentIndex) {
+            songBox.addClass("active");
+        }
+        songUpElement.on("click", () => {
+            if (i > 0) {
+                [songList[i], songList[i - 1]] = [songList[i - 1], songList[i]];
+                localStorage.setItem("songList", JSON.stringify(songList));
+                currentIndex = (i === currentIndex) ? currentIndex - 1 : (currentIndex === i - 1) ? currentIndex + 1 : currentIndex;
+                localStorage.setItem("currentIndex", JSON.stringify(currentIndex));
+                initPlayList();
+            }
+        });
+
+        songDownElement.on("click", () => {
+            if (i < songList.length - 1) {
+                [songList[i], songList[i + 1]] = [songList[i + 1], songList[i]];
+                localStorage.setItem("songList", JSON.stringify(songList));
+                currentIndex = (i === currentIndex) ? currentIndex + 1 : (currentIndex === i + 1) ? currentIndex - 1 : currentIndex;
+                localStorage.setItem("currentIndex", JSON.stringify(currentIndex));
+                initPlayList();
+            }
+        });
+
+        songRemoveElement.on("click", () => {
+            songList.splice(i, 1);
+            localStorage.setItem("songList", JSON.stringify(songList));
+            if (i === currentIndex) {
+                currentIndex = 0;
+                if (songList.length > 0) {
+                    updateCurrentSong(currentIndex);
+                }
+            } else if (i < currentIndex) {
+                currentIndex--;
+            }
+            localStorage.setItem("currentIndex", JSON.stringify(currentIndex));
+            initPlayList();
+        });
+        songBox.append(songElement);
+        songUpElement.append(upicon);
+        songDownElement.append(downicon);
+        songRemoveElement.append(removeicon);
+        controls.append(songUpElement);
+        controls.append(songDownElement);
+        controls.append(songRemoveElement);
+        songBox.append(controls);
+
+        $("#playlist").append(songBox);
+    });
+}
+
+function switchPlayList() {
+    if ($("#playlist").css("display") === "block") {
+        $("#playlist").css("display", "none");
+        $("#playlist-close").css("display", "none");
+    } else {
+        $("#playlist").css("display", "block");
+        $("#playlist-close").css("display", "flex");
+    }
 }
 
 initPlayer();
-
-$("#playlist-Box").on("click",function () {
-    $("#playlist-Box").css("display","none");
-});
