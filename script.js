@@ -39,8 +39,14 @@ function initPlayer() {
     $("#playlist-box").on("click", switchPlayList);
 }
 
-function initSong(){
-
+function initSong() {
+    showCurrentSong();
+    togglePlayPause();
+    const music = $("#audio-box > audio").get(0);
+    music.volume = volumeValue / 100;
+    if (loopMode === 2) {
+        music.prop("loop", true);
+    }
 }
 
 function initSongTime(time, duration) {
@@ -111,23 +117,11 @@ function setupControls() {
     $("#play").on("click", togglePlayPause);
     $("#next").on("click", () => {
         getNextSong();
-        showCurrentSong();
-        togglePlayPause();
-        const music = $("#audio-box > audio").get(0);
-        music.volume = volumeValue / 100;
-        if (loopMode === 2) {
-            music.prop("loop", true); 置
-        }
+        initSong();
     });
     $("#prev").on("click", () => {
         getPrevSong();
-        showCurrentSong();
-        togglePlayPause();
-        const music = $("#audio-box > audio").get(0);
-        music.volume = volumeValue / 100;
-        if (loopMode === 2) {
-            music.prop("loop", true); 置
-        }
+        initSong();
     });
     $("#loop").on("click", () => {
         loopMode = (loopMode + 1) % 3;
@@ -216,13 +210,7 @@ function initPlayList() {
         songElement.on("click", () => {
             currentIndex = i;
             updateCurrentSong(currentIndex);
-            showCurrentSong();
-            togglePlayPause();
-            const music = $("#audio-box > audio").get(0);
-            music.volume = volumeValue / 100;
-            if (loopMode === 2) {
-                music.prop("loop", true); 置
-            }
+            initSong();
         });
         if (i === currentIndex) {
             songBox.addClass("active");
