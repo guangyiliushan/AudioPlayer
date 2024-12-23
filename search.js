@@ -48,8 +48,6 @@ function showSearchResult(input) {
         $("#search-result").append(songBox);
     });
     $("#search-result").css("display", "flex");
-    $("#timeslider-text-current").text(formatTime(time));
-    $("#timeslider-text-total").text(formatTime(duration));
 }
 
 $(document).ready(function () {
@@ -66,6 +64,7 @@ $(document).ready(function () {
         if (!$(event.target).closest("#search").length) {
             $("#search-result").css("display", "none");
             $("#search-input").css("color", "#888");
+            $("#reason").text("");
         }
     });
 });
@@ -134,5 +133,6 @@ function recommendSong() {
     const recentSongs = getRecentSongs();
     const topCategories = getTopCategories(recentSongs);
     const topArtists = getTopArtists(recentSongs);
+    $("#reason").text(`根据最近常听的${topCategories.join(",")}和${topArtists.join(",")}推荐`)
     return getRecommendedSongs(topCategories, topArtists);
 }

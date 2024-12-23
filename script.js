@@ -6,6 +6,9 @@ var songList = localStorage.getItem("songList") ? JSON.parse(localStorage.getIte
 var currentSong = localStorage.getItem("currentSong") ? JSON.parse(localStorage.getItem("currentSong")) : {};
 var currentIndex = localStorage.getItem("currentIndex") ? JSON.parse(localStorage.getItem("currentIndex")) : 0;
 var playTime = localStorage.getItem("playTime") ? JSON.parse(localStorage.getItem("playTime")) : 0;
+var listName = localStorage.getItem("listName") ? JSON.parse(localStorage.getItem("listName")) : [{ name: "default", songlist: songList }];
+var currentListName = localStorage.getItem("currentListName") ? JSON.parse(localStorage.getItem("currentListName")) : "default";
+var listIndex = localStorage.getItem("listIndex") ? JSON.parse(localStorage.getItem("listIndex")) : 0;
 
 function setCookie(songName, artistName, days = 1) {
     const fileName = `${artistName} - ${songName}`;
@@ -35,8 +38,18 @@ function getCookie(name) {
 function initPlayer() {
     showCurrentSong();
     setupControls();
+    initListName();
     initPlayList();
-    $("#playlist-box").on("click", switchPlayList);
+    $("#playlist-box").on("click", () => {
+        $("#playlist").css("display", "block");
+        $("#playlist-close").css("display", "flex");
+        $("#playlist-control-box").css("display", "flex");
+    });
+    $("#playlist-close").on("click", () => {
+        $("#playlist").hide(10);
+        $("#playlist-close").hide(10);
+        $("#playlist-control-box").hide(10);
+    });
 }
 
 function initSong() {
@@ -47,6 +60,10 @@ function initSong() {
     if (loopMode === 2) {
         music.prop("loop", true);
     }
+    $("#disc-cover").css('animation', null);
+    setTimeout(() => {
+        $("#disc-cover").css('animation', '10s linear 0s infinite normal none running disc-rotate');
+    }, 100);
 }
 
 function initSongTime(time, duration) {
@@ -87,6 +104,10 @@ function openSong(fileUrl, time) {
 
     audio.addEventListener("play", () => {
         $("#disc-cover").css("animation-play-state", "running");
+        if (!audio.visualizationInitialized) {
+            visualize();
+            audio.visualizationInitialized = true;
+        }
     });
 }
 
@@ -269,16 +290,6 @@ function initPlayList() {
     });
 }
 
-function switchPlayList() {
-    if ($("#playlist").css("display") === "block") {
-        $("#playlist").css("display", "none");
-        $("#playlist-close").css("display", "none");
-    } else {
-        $("#playlist").css("display", "block");
-        $("#playlist-close").css("display", "flex");
-    }
-}
-
 function updateVolume(value) {
     const audio = document.querySelector("#audio-box > audio");
     audio.volume = value / 100;;
@@ -293,6 +304,105 @@ function updateVolume(value) {
         volumeIcon.addClass("fa-volume-down");
     }
     volumeValue = value;
+}
+
+function initListName() {
+    $("#playlist-name").empty();
+    listName.forEach((list, i) => {
+        let songBox = $(`<div class="playlist-name-item"></div>`);
+        const songElement = $(`<div class="playlist-name-item-songname">${list.name}</div>`);
+        if (list.name === currentListName && listIndex === i) {
+            songBox.addClass("active");
+        }
+        songElement.on("click", () => {
+            const currentList = listName.find(l => l.name === currentListName);
+            if (currentList) {
+                currentList.songlist = songList;
+                localStorage.setItem("listName", JSON.stringify(listName));
+            }
+            currentIndex = (listIndex == i) ? currentIndex : 0;
+            songList = list.songlist;
+            listIndex = i;
+            currentListName = list.name;
+            localStorage.setItem("currentListName", JSON.stringify(currentListName));
+            localStorage.setItem("listIndex", JSON.stringify(listIndex));
+            localStorage.setItem("songList", JSON.stringify(songList));
+            localStorage.setItem("currentIndex", JSON.stringify(currentIndex));
+            initPlayList();
+            initListName();
+            initPlayList();
+            if (songList.length > 0 ) {
+                updateCurrentSong(currentIndex);
+                initSong();
+            }
+        });
+        songBox.append(songElement);
+        $("#playlist-name").append(songBox);
+    });
+
+    $("#playlist-add").off("click").on("click", () => {
+        $("#playlist-control-box").empty().css("display", "flex");
+        let listNameAdd = $(`<div id="playlist-add-box"></div>`);
+        const input = $(`<input type="text" id="playlist-add-input" placeholder="输入歌单名称">`);
+        const confirm = $(`<button id="playlist-add-confirm">确认</button>`);
+        const cancel = $(`<button id="playlist-add-cancel">取消</button>`);
+        listNameAdd.append(input, confirm, cancel);
+        $("#playlist-control-box").append(listNameAdd);
+
+        $("#playlist-add-confirm").off("click").on("click", () => {
+            const name = $("#playlist-add-input").val().trim();
+            if (name && !listName.some(list => list.name === name)) {
+                listName.push({ name: name, songlist: [] });
+                localStorage.setItem("listName", JSON.stringify(listName));
+                initListName();
+            }
+            $("#playlist-control-box").empty();
+            recreatePlaylistControl();
+        });
+
+        $("#playlist-add-cancel").off("click").on("click", () => {
+            $("#playlist-control-box").empty();
+            recreatePlaylistControl();
+        });
+    });
+
+    $("#playlist-delete").off("click").on("click", () => {
+        listName = listName.filter(list => list.name !== currentListName);
+        if (listName.length === 0) {
+            listName.push({ name: "default", songlist: [] });
+        }
+        currentListName = listName[0].name;
+        songList = listName[0].songlist;
+        listIndex = 0;
+        currentIndex = 0;
+        localStorage.setItem("listName", JSON.stringify(listName));
+        localStorage.setItem("listIndex", JSON.stringify(listIndex));
+        localStorage.setItem("currentListName", JSON.stringify(currentListName));
+        localStorage.setItem("songList", JSON.stringify(songList));
+        localStorage.setItem("currentIndex", JSON.stringify(currentIndex));
+        initListName();
+        initPlayList();
+        initSong();
+    });
+    listNameScroll();
+}
+
+function recreatePlaylistControl() {
+    const playlistName = $(`<div id="playlist-name"></div>`);
+    const playlistControl = $(`<div id="playlist-control"></div>`);
+    const playlistAdd = $(`<div id="playlist-add"><i class="fas fa-plus"></i></div>`);
+    const playlistDelete = $(`<div id="playlist-delete"><i class="fas fa-trash-alt"></i></div>`);
+    playlistControl.append(playlistAdd, playlistDelete);
+    $("#playlist-control-box").append(playlistName, playlistControl);
+    initListName();
+}
+
+function listNameScroll() {
+    document.querySelector('#playlist-name').addEventListener('wheel', function(event) {
+        var delta = Math.max(-1, Math.min(1, (event.wheelDelta || -event.detail)));
+        this.scrollLeft -= (delta * 40);
+        event.preventDefault();
+    }, false);
 }
 
 initPlayer();

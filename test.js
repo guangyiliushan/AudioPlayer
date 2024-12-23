@@ -9,6 +9,18 @@
 //         "duration": 298.16163265306125
 //     },
 //     {
+//         "title": "Печаль",
+//         "artist": "Кино",
+//         "album": "Звезда по имени Солнце",
+//         "duration": 332.9044897959184
+//     },
+//     {
+//         "title": "Солнце",
+//         "artist": "Перемотка",
+//         "album": "Солнце",
+//         "duration": 165.98204081632653
+//     },
+//     {
 //         "title": "Beetlebum",
 //         "artist": "Blur",
 //         "album": "Blur: The Best Of",
@@ -19,14 +31,7 @@
 //         "artist": "DOUDOU",
 //         "album": "南三环东路",
 //         "duration": 376.128
-//     },
-//     {
-//         "title": "The Narcissist",
-//         "artist": "Blur",
-//         "album": "The Narcissist",
-//         "duration": 245.26367346938775
 //     }
-
 // ];
 
 // var currentSong = {
@@ -47,7 +52,7 @@
 //     localStorage.setItem("songList", JSON.stringify(songList));
 // }
 
-// addSongsToLocalStorage(allSongs.slice(0, 3));
+// addSongsToLocalStorage(allSongs.slice(0, 5));
 // localStorage.setItem("currentSong", JSON.stringify(currentSong));
 // localStorage.setItem("currentIndex", JSON.stringify(currentIndex));
 
@@ -61,6 +66,8 @@
 //         document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/";
 //     }
 // }
+
+// clearAllCookies()
 
 console.log(songList);
 console.log(JSON.parse(localStorage.getItem("currentSong"))); 

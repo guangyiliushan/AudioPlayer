@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <script src="jquery-3.7.1.js"></script>
+    <script src="visualization.js" defer></script>
     <script src="script.js" defer></script>
     <script src="search.js" defer></script>
     <script src="test.js" defer></script>
@@ -16,9 +17,16 @@
 <body>
     <div id="container">
         <div id="header">
-            <div id="logo"></div>
+            <div id="reason-box"><div id="reason"></div></div>
             <div id="playlist-box">
                 <i class="fas fa-list"></i>
+                <div id="playlist-control-box">
+                    <div id="playlist-name"></div>
+                    <div id="playlist-control">
+                        <div id="playlist-add"><i class="fas fa-plus"></i></div>
+                        <div id="playlist-delete"><i class="fas fa-trash-alt"></i></div>
+                    </div>
+                </div>
                 <div id="playlist"></div>
                 <div id="playlist-close"><i class="fas fa-angle-double-right"></i></div>
             </div>
@@ -90,8 +98,8 @@
     </div>
 
     <footer>
-        <div id="frequency-box">
-            <canvas id="frequency"></canvas>
+        <div id="visualizer-box">
+            <canvas id="visualizer"></canvas>
         </div>
     </footer>
 </body>
